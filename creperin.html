@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<title>クレペリン検査</title>
+		<link rel="stylesheet" type="text/css" href="creperin.css">
+		<script src="jquery.js" type="text/javascript"></script>
+	</head>
+	<body>
+
+		<center>
+			<div id="content_index" style="height: auto !important;">
+					<h1>クレペリン検査</h1>
+					<div id="contents_area">
+					</div>
+				</div>
+			</div>
+		</center>
+
+		<!-- 以下、テンプレート -->
+
+		<div id="templ_title" style="display:none;">
+			<div id="push_button_space">
+				<input type="button" class="btn" value="スタート" onClick="scene.next()" />
+			</div>
+		</div>
+
+		<div id="templ_main" style="display:none;">
+
+			<div id="status">
+			</div>
+
+			<div id="limit_time">
+			</div>
+
+			<center><canvas id="crep_text" width="400px" height="80px"></canvas></center>
+			
+			<br>
+			<br>
+
+			<div id="crep_insert_buttons">
+				<input type="button" class="btn" value="７" onClick="scene.insert_button(7)" />
+				<input type="button" class="btn" value="８" onClick="scene.insert_button(8)" />
+				<input type="button" class="btn" value="９" onClick="scene.insert_button(9)" /><br>
+				<input type="button" class="btn" value="４" onClick="scene.insert_button(4)" />
+				<input type="button" class="btn" value="５" onClick="scene.insert_button(5)" />
+				<input type="button" class="btn" value="６" onClick="scene.insert_button(6)" /><br>
+				<input type="button" class="btn" value="１" onClick="scene.insert_button(1)" />
+				<input type="button" class="btn" value="２" onClick="scene.insert_button(2)" />
+				<input type="button" class="btn" value="３" onClick="scene.insert_button(3)" /><br>
+				<input type="button" class="btn" value="０" onClick="scene.insert_button(0)" />
+			</div>
+		</div>
+
+		<div id="templ_result" style="display:none;">
+			<div id="result_center_text">
+				<br>
+				検査終了です。お疲れ様でした。
+				<br>
+				<br>
+				<table width="400px" style="margin-left:auto;margin-right:auto;">
+					<tr>
+						<td width="50%">
+							<div id="result_answer_total_title">あなたの解答数</div>
+						</td>
+						<td width="50%">
+							<div id="result_correct_total_title">あなたの正答数</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="result_answer_total"></div>
+						</td>
+						<td>
+							<div id="result_correct_total"></div>
+						</td>
+					</tr>
+				</table>
+				<br>
+				<div style="text-align: center;">
+				あなたの正解率は<span id="result_correct_rate"></span>です。
+				</div>
+				<br>
+				<div id="result_buttons" style="display:none;">
+					<div>
+					次のアンケート画面に解答数、正解数、正解率を記入してください。
+					</div>
+					<br>
+					<div>
+						<a href="#" id="result_questionnaire_url">アンケート画面へ...</a>
+					</div>
+					<br>
+					<input type="button" class="btn" value="スタートに戻る" onClick="scene.click()" />
+				</div>
+				<br>
+			</div>	
+		</div>
+
+		<!-- 以下、スクリプト -->
+
+		<script type="text/javascript" src="creperin.js"></script>
+
+	</body>
+
+</html>
