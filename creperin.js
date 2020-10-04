@@ -1,23 +1,26 @@
 var scene,ctx,canvas;
 
-// var startCountdown = 5; // 開始カウントダウン（秒）
-// var takeHalftime = true; // ハーフ・タイムを取るかどうか
-// var crepCountTotal = 2; // 総問題数
-// var crepCountHalf  = Math.floor(crepCountTotal / 2); // ハーフ
-// var crepLineCountdown  = 2; // 秒
-// var crepHalftime = 10; // 秒
-// var crepNumbersCount = 500;
-
 var settings = {
 	startCountdown : 3, // 開始カウントダウン（秒）
 	crepCountTotal : 1, // 総問題数
 	crepNumbersCount : 700, // 1回の問題数
-	crepLineCountdown : 300, // 1回の問題の制限時間（秒）
+	crepLineCountdown : 10, // 1回の問題の制限時間（秒）
 	takeHalftime : false, // ハーフ・タイムを取るかどうか
 	crepCountHalf : 1, // ハーフ・タイムを取る問題の位置（ < 総問題数）
 	crepHalftime : 10, // ハーフタイムの時間（秒）
 	questionnaireUrl : 'https://yahoo.co.jp' // アンケート画面のURL
 };
+
+// var settings = {
+// 	startCountdown : 3, // 開始カウントダウン（秒）
+// 	crepCountTotal : 1, // 総問題数
+// 	crepNumbersCount : 700, // 1回の問題数
+// 	crepLineCountdown : 2, // 1回の問題の制限時間（秒）
+// 	takeHalftime : false, // ハーフ・タイムを取るかどうか
+// 	crepCountHalf : 1, // ハーフ・タイムを取る問題の位置（ < 総問題数）
+// 	crepHalftime : 10, // ハーフタイムの時間（秒）
+// 	questionnaireUrl : 'https://yahoo.co.jp' // アンケート画面のURL
+// };
 
 //////////////////////////////////////////////////////////////////////////////////
 //
@@ -327,7 +330,7 @@ Main.prototype.insert_button = function(answer){
  * @param {*} send_data 
  */
 function Finish_scene(send_data){
-	var crep_obj = send_data;
+	let crep_obj = send_data;
 	
 	/*
 	var formar_right_data = [];
@@ -344,9 +347,9 @@ function Finish_scene(send_data){
 	// console.log(send_data);
 	// console.log(later_wrong_data);
 	
-	var result_answer_total = 0;  // 解答数
-	var result_correct_total = 0; // 正答数
-	var result_correct_rate = 0;  // 正答率
+	let result_answer_total = 0;  // 解答数
+	let result_correct_total = 0; // 正答数
+	let result_correct_rate = 0;  // 正答率
 
 	for (var n = 0; n < settings.crepCountTotal; n++) {
 		result_answer_total = result_answer_total + crep_obj[n].answer_num;
@@ -354,18 +357,45 @@ function Finish_scene(send_data){
 	}
 
 	if (result_answer_total > 0) {
-		// result_correct_rate = Math.floor(result_correct_total / result_answer_total) * 100;
+		// result_correct_rate = Math.floor(result_correct_total / result_answer_total);
 		result_correct_rate = Math.floor((result_correct_total / result_answer_total) * 100);
+
 	}
-
-	var contents = $('#templ_result').children().clone();
+	// 
+	let contents = $('#templ_result').children().clone();
 	$('#contents_area').html(contents);
+	//let result_answer_total_str = '1' + zeroPadding(result_answer_total, 3) + zeroPadding(result_correct_total, 3) + zeroPadding(result_correct_rate, 3);
+	//var result = '解答数=' + result_answer_total + ', 正答数=' + result_correct_total + ', 正答率(%)=' + result_correct_rate;
+	
+	let result_cd = creEncrypt(result_answer_total, result_correct_total, result_correct_rate); //doConvert(result_answer_total) + ':' + doConvert(result_correct_total) + ':' + doConvert(result_correct_rate);
 
+	// let test = '';
+	// //test = test + '@解答数=' + result_answer_total + ', 正答数=' + result_correct_total + ', 正答率(%)=' + result_correct_rate;
+	// test = test + '@' + creDecrypt(result_cd);
+	// result_cd = result_cd + test;
+	// let test = '';
+	// test = test + '@' + creEncrypt(999,999,100);
+	// result_cd = result_cd + test;
+	// let test = '';
+	// test = test + '@' + creTest('cre:nqvunyct');
+	// test = test + '@' + creDecrypt('cre:nqvunyct');
+	// result_cd = result_cd + test;
+	/*
+	var result_cd = 'R:' + JSON.stringify({ 
+		at : result_answer_total,
+		ct : result_correct_total,
+		cr : result_correct_rate
+	});
+  */
+	
+	$('#result_code').val(result_cd);
+
+	/*
 	$('#result_answer_total').text(result_answer_total);
 	$('#result_correct_total').text(result_correct_total);
 	$('#result_correct_rate').text(result_correct_rate + '%');
-
 	$('#result_questionnaire_url').attr('href', settings.questionnaireUrl);
+	*/
 
 	setTimeout(() => {
 		$('#result_buttons').css('display', '');
@@ -373,6 +403,109 @@ function Finish_scene(send_data){
 
 	//calcu_result(formar_right_data,later_right_data,formar_wrong_data,later_wrong_data);
 }
+
+/*
+const base = "NOPQRSTUVWXYZABCDEFGHIJKLM";
+
+function doConvert(indata) {
+	const nn = base.length;
+	let data = indata;
+	let indexes = [];
+	while (true) {
+		var data2 = Math.floor(data / nn);
+		var index = data % nn
+		indexes.push(index);
+		if (data2 == 0) {
+			break;
+		}
+		data = data2;
+	}
+	var ret='';
+	for (var n = indexes.length ; n >= 0; n--) {
+		ret = ret + base.charAt(indexes[n]);
+	}
+	return ret;
+}
+function doConvert10(indata) {
+	const nn = base.length;
+	let data1 = indata;
+	let ret = 0;
+	for (var n = 0; n < data1.length; n++) {
+		var data2 = base.indexOf(data1.charAt(n));
+		ret = data2 + (ret * nn);
+	}
+	return ret;
+}
+*/
+
+// 見えないように暗号化 ////////////////////////////////////////////////////////////
+let base = "NOPQRSTUVWXYZABCDEFGHIJKLM";
+function creTest(str) {
+	str = String(str).toUpperCase();
+  //console.log(str);
+	let reg = new RegExp('^CRE:[' + base + ']+$');
+	return reg.test(str);
+}
+function creGetCode(str) {
+	//let reg = new RegExp('^CRE:[' + base + ']+$');
+	let ret = '';
+	str = str.toUpperCase();
+	if (creTest(str) === true) {
+		var prefix = str.substring(0, 4).toUpperCase();
+		var code = str.substring(5,str.length).toUpperCase();
+		ret = code;
+	}
+	return ret;
+}
+function creEncrypt(at,ct,cr) {
+	indata = '1' + zeroPadding(at, 3) + zeroPadding(ct, 3) + zeroPadding(cr, 3);
+	//console.log('***' + indata);
+	const nn = base.length;
+	let data = indata;
+	let indexes = [];
+	while (true) {
+		var data2 = Math.floor(data / nn);
+		var index = data % nn
+		indexes.push(index);
+		if (data2 === 0) {
+			break;
+		}
+		data = data2;
+	}
+	var ret='';
+	for (var n = indexes.length ; n >= 0; n--) {
+		ret = ret + base.charAt(indexes[n]);
+	}
+	return 'CRE:' + ret;
+}
+function creDecrypt(indata) {
+	//console.log('***' + indata);
+	const nn = base.length;
+	let data1 = indata;
+	let cal = 0;
+	let ret = ''
+	data1 = creGetCode(data1);
+	if (data1.length === 0) {
+		return ret;
+	}
+	for (var n = 0; n < data1.length; n++) {
+		var data2 = base.indexOf(data1.charAt(n));
+		cal = data2 + (cal * nn);
+	}
+	let at = parseInt(cal.toString().substr(1, 3), 10);
+	let ct = parseInt(cal.toString().substr(4, 3), 10);
+	let cr = parseInt(cal.toString().substr(7, 3), 10);
+	// console.log('***at' + at);
+	// console.log('***ct' + ct);
+	// console.log('***cr' + cr);
+	ret = '解答数=' + at + ', 正答数=' + ct + ', 正答率(%)=' + cr;
+	//console.log('***' + ret);
+	return ret;
+}
+function zeroPadding(num, len){
+	return ( Array(len).join('0') + num ).slice( -len );
+}
+// 見えないように暗号化 ////////////////////////////////////////////////////////////
 
 /**
  * 
