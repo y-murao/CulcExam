@@ -4,7 +4,7 @@ var settings = {
 	startCountdown : 3, // 開始カウントダウン（秒）
 	crepCountTotal : 1, // 総問題数
 	crepNumbersCount : 700, // 1回の問題数
-	crepLineCountdown : 10, // 1回の問題の制限時間（秒）
+	crepLineCountdown : 300, // 1回の問題の制限時間（秒）
 	takeHalftime : false, // ハーフ・タイムを取るかどうか
 	crepCountHalf : 1, // ハーフ・タイムを取る問題の位置（ < 総問題数）
 	crepHalftime : 10, // ハーフタイムの時間（秒）
